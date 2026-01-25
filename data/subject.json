@@ -1,0 +1,9 @@
+{
+  "address": "123 Main Street, Riyadh",
+  "sqft": 2500,
+  "bedrooms": 4,
+  "bathrooms": 3,
+  "year_built": 2018,
+  "location_score": 0.85,
+  "property_type": "residential"
+}
