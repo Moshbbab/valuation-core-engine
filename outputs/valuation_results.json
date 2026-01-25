@@ -1,0 +1,142 @@
+{
+  "normalization": {
+    "method": "zscore",
+    "mean_psf": 763.868473810929,
+    "std_psf": 13.059642727665556,
+    "outliers": 0
+  },
+  "adjustments": [
+    {
+      "comparable_id": "comp_001",
+      "original_price": 1850000,
+      "adjusted_price": 1888340.997665968,
+      "total_adjustment_pct": 0.020724863603226014,
+      "adjustments": {
+        "size": 0.004166666666666667,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "age": 0.01,
+        "location": 0.0,
+        "time": 0.006558196936559346
+      }
+    },
+    {
+      "comparable_id": "comp_002",
+      "original_price": 1920000,
+      "adjusted_price": 1892173.9251894047,
+      "total_adjustment_pct": -0.01449274729718502,
+      "adjustments": {
+        "size": -0.0038461538461538464,
+        "bedrooms": 0.0,
+        "bathrooms": -0.015,
+        "age": -0.01,
+        "location": 0.004500000000000004,
+        "time": 0.009853406548968824
+      }
+    },
+    {
+      "comparable_id": "comp_003",
+      "original_price": 1780000,
+      "adjusted_price": 1944595.5176818792,
+      "total_adjustment_pct": 0.09246939195611197,
+      "adjustments": {
+        "size": 0.008695652173913044,
+        "bedrooms": 0.05,
+        "bathrooms": 0.015,
+        "age": 0.02,
+        "location": -0.004500000000000004,
+        "time": 0.0032737397821989145
+      }
+    },
+    {
+      "comparable_id": "comp_004",
+      "original_price": 1950000,
+      "adjusted_price": 1986462.308037581,
+      "total_adjustment_pct": 0.018698619506451717,
+      "adjustments": {
+        "size": -0.00196078431372549,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "age": -0.0,
+        "location": 0.007499999999999989,
+        "time": 0.013159403820177218
+      }
+    },
+    {
+      "comparable_id": "comp_005",
+      "original_price": 1890000,
+      "adjusted_price": 1922317.1350672399,
+      "total_adjustment_pct": 0.017099013263089956,
+      "adjustments": {
+        "size": 0.002040816326530612,
+        "bedrooms": 0.0,
+        "bathrooms": 0.0,
+        "age": 0.01,
+        "location": -0.0015000000000000013,
+        "time": 0.006558196936559346
+      }
+    }
+  ],
+  "weighting": {
+    "final_value": 1934222.346183956,
+    "weights": {
+      "market": 0.6477272727272727,
+      "income": 0.27272727272727276,
+      "cost": 0.07954545454545454
+    },
+    "value_range": [
+      1737641.539700734,
+      2130803.152667178
+    ],
+    "approach_values": {
+      "market": 1926777.9767284144,
+      "income": 1965313.5362629828,
+      "cost": 1888242.417193846
+    }
+  },
+  "hierarchy": {
+    "level": 3,
+    "level_1_count": 0,
+    "level_2_count": 1,
+    "level_3_count": 3,
+    "disclosure_required": true
+  },
+  "uncertainty": {
+    "standard_error": 18130.671554217453,
+    "confidence_interval": [
+      1883883.5318933,
+      1984561.160474612
+    ],
+    "coefficient_of_variation": 0.02104104082702334
+  },
+  "vci": {
+    "score": 91.09,
+    "confidence_level": "HIGH",
+    "components": {
+      "data_quality": 90.33,
+      "comparable_strength": 86.92,
+      "model_stability": 92.99,
+      "market_liquidity": 100,
+      "disclosure_level": 86.67
+    },
+    "interpretation": "Exceptional confidence. Valuation is highly reliable with minimal uncertainty.",
+    "recommendations": [
+      "Valuation confidence is strong. No major improvements needed."
+    ]
+  },
+  "summary": {
+    "subject_address": "123 Main Street, Riyadh",
+    "property_type": "residential",
+    "size_sqft": 2500,
+    "final_value": 1934222.346183956,
+    "value_range": [
+      1737641.539700734,
+      2130803.152667178
+    ],
+    "price_per_sqft": 773.6889384735823,
+    "vci_score": 91.09,
+    "confidence_level": "HIGH",
+    "hierarchy_level": 3,
+    "date": "2026-01-25T16:30:21.836463"
+  }
+}
