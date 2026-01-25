@@ -111,7 +111,7 @@
   },
   "vci": {
     "score": 91.09,
-    "confidence_level": "HIGH",
+    "confidence_level": "EXCEPTIONAL",
     "components": {
       "data_quality": 90.33,
       "comparable_strength": 86.92,
@@ -135,8 +135,8 @@
     ],
     "price_per_sqft": 773.6889384735823,
     "vci_score": 91.09,
-    "confidence_level": "HIGH",
+    "confidence_level": "EXCEPTIONAL",
     "hierarchy_level": 3,
-    "date": "2026-01-25T16:30:21.836463"
+    "date": "2026-01-25T16:41:37.124438"
   }
 }

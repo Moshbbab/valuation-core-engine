@@ -318,7 +318,9 @@ class ConfidenceIndexCalculator:
     
     def _get_confidence_level(self, vci: float) -> str:
         """Get confidence level category."""
-        if vci >= 80:
+        if vci >= 90:
+            return "EXCEPTIONAL"
+        elif vci >= 80:
             return "HIGH"
         elif vci >= 60:
             return "MODERATE"
