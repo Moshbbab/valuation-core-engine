@@ -2,19 +2,14 @@
 Tests for UncertaintyModel – src/core/intelligence_kernel/uncertainty_model.py
 """
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
-
 import pytest
 import numpy as np
 from core.intelligence_kernel.uncertainty_model import UncertaintyModel, UncertaintyResult
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def model():
@@ -25,22 +20,23 @@ def model():
 def comparables_5():
     """Five comparables with adjusted prices close to 1,934,222."""
     return [
-        {'adjusted_price': 1_888_341},
-        {'adjusted_price': 1_892_174},
-        {'adjusted_price': 1_944_596},
-        {'adjusted_price': 1_986_462},
-        {'adjusted_price': 1_922_317},
+        {"adjusted_price": 1_888_341},
+        {"adjusted_price": 1_892_174},
+        {"adjusted_price": 1_944_596},
+        {"adjusted_price": 1_986_462},
+        {"adjusted_price": 1_922_317},
     ]
 
 
 @pytest.fixture
 def value_5(comparables_5):
-    return np.mean([c['adjusted_price'] for c in comparables_5])
+    return np.mean([c["adjusted_price"] for c in comparables_5])
 
 
 # ---------------------------------------------------------------------------
 # UncertaintyResult type
 # ---------------------------------------------------------------------------
+
 
 class TestUncertaintyResultType:
     def test_returns_uncertainty_result(self, model, comparables_5, value_5):
@@ -51,6 +47,7 @@ class TestUncertaintyResultType:
 # ---------------------------------------------------------------------------
 # Confidence interval
 # ---------------------------------------------------------------------------
+
 
 class TestConfidenceInterval:
     def test_ci_lower_less_than_value(self, model, comparables_5, value_5):
@@ -64,20 +61,20 @@ class TestConfidenceInterval:
     def test_tighter_ci_with_more_comparables(self, model):
         value = 1_500_000
         few_comps = [
-            {'adjusted_price': 1_450_000},
-            {'adjusted_price': 1_550_000},
+            {"adjusted_price": 1_450_000},
+            {"adjusted_price": 1_550_000},
         ]
         many_comps = [
-            {'adjusted_price': 1_460_000},
-            {'adjusted_price': 1_480_000},
-            {'adjusted_price': 1_500_000},
-            {'adjusted_price': 1_520_000},
-            {'adjusted_price': 1_540_000},
-            {'adjusted_price': 1_510_000},
-            {'adjusted_price': 1_490_000},
-            {'adjusted_price': 1_505_000},
-            {'adjusted_price': 1_495_000},
-            {'adjusted_price': 1_515_000},
+            {"adjusted_price": 1_460_000},
+            {"adjusted_price": 1_480_000},
+            {"adjusted_price": 1_500_000},
+            {"adjusted_price": 1_520_000},
+            {"adjusted_price": 1_540_000},
+            {"adjusted_price": 1_510_000},
+            {"adjusted_price": 1_490_000},
+            {"adjusted_price": 1_505_000},
+            {"adjusted_price": 1_495_000},
+            {"adjusted_price": 1_515_000},
         ]
         few_result = model.calculate_uncertainty(value, few_comps)
         many_result = model.calculate_uncertainty(value, many_comps)
@@ -97,6 +94,7 @@ class TestConfidenceInterval:
 # Standard error
 # ---------------------------------------------------------------------------
 
+
 class TestStandardError:
     def test_standard_error_positive(self, model, comparables_5, value_5):
         result = model.calculate_uncertainty(value_5, comparables_5)
@@ -111,6 +109,7 @@ class TestStandardError:
 # Coefficient of variation
 # ---------------------------------------------------------------------------
 
+
 class TestCoefficientOfVariation:
     def test_cv_positive(self, model, comparables_5, value_5):
         result = model.calculate_uncertainty(value_5, comparables_5)
@@ -122,14 +121,8 @@ class TestCoefficientOfVariation:
 
     def test_higher_dispersion_gives_higher_cv(self, model):
         value = 1_000_000
-        tight_comps = [
-            {'adjusted_price': v}
-            for v in [990_000, 995_000, 1_000_000, 1_005_000, 1_010_000]
-        ]
-        wide_comps = [
-            {'adjusted_price': v}
-            for v in [700_000, 850_000, 1_000_000, 1_150_000, 1_300_000]
-        ]
+        tight_comps = [{"adjusted_price": v} for v in [990_000, 995_000, 1_000_000, 1_005_000, 1_010_000]]
+        wide_comps = [{"adjusted_price": v} for v in [700_000, 850_000, 1_000_000, 1_150_000, 1_300_000]]
         tight_result = model.calculate_uncertainty(value, tight_comps)
         wide_result = model.calculate_uncertainty(value, wide_comps)
         assert wide_result.coefficient_of_variation > tight_result.coefficient_of_variation
@@ -139,9 +132,10 @@ class TestCoefficientOfVariation:
 # Fallback for insufficient comparables
 # ---------------------------------------------------------------------------
 
+
 class TestInsufficientComparablesFallback:
     def test_single_comparable_returns_result(self, model):
-        result = model.calculate_uncertainty(1_500_000, [{'adjusted_price': 1_500_000}])
+        result = model.calculate_uncertainty(1_500_000, [{"adjusted_price": 1_500_000}])
         assert isinstance(result, UncertaintyResult)
 
     def test_empty_comparables_returns_result(self, model):
@@ -158,6 +152,7 @@ class TestInsufficientComparablesFallback:
 # ---------------------------------------------------------------------------
 # Value range by percentiles
 # ---------------------------------------------------------------------------
+
 
 class TestValueRange:
     def test_value_range_returns_tuple(self, model, comparables_5):
@@ -179,28 +174,23 @@ class TestValueRange:
 # Model stability
 # ---------------------------------------------------------------------------
 
+
 class TestModelStability:
     def test_stable_for_tight_comparables(self, model):
-        tight_comps = [
-            {'adjusted_price': v}
-            for v in [990_000, 995_000, 1_000_000, 1_005_000, 1_010_000]
-        ]
+        tight_comps = [{"adjusted_price": v} for v in [990_000, 995_000, 1_000_000, 1_005_000, 1_010_000]]
         stability = model.assess_model_stability(tight_comps, 1_000_000)
-        assert stability['stable']
+        assert stability["stable"]
 
     def test_unstable_for_dispersed_comparables(self, model):
-        dispersed_comps = [
-            {'adjusted_price': v}
-            for v in [500_000, 800_000, 1_500_000, 2_000_000, 2_500_000]
-        ]
+        dispersed_comps = [{"adjusted_price": v} for v in [500_000, 800_000, 1_500_000, 2_000_000, 2_500_000]]
         stability = model.assess_model_stability(dispersed_comps, 1_460_000)
-        assert not stability['stable']
+        assert not stability["stable"]
 
     def test_stability_result_contains_required_keys(self, model, comparables_5, value_5):
         stability = model.assess_model_stability(comparables_5, value_5)
-        for key in ('stable', 'coefficient_of_variation', 'z_score', 'interpretation'):
+        for key in ("stable", "coefficient_of_variation", "z_score", "interpretation"):
             assert key in stability
 
     def test_insufficient_comparables_returns_not_stable(self, model):
-        stability = model.assess_model_stability([{'adjusted_price': 1_000_000}], 1_000_000)
-        assert not stability['stable']
+        stability = model.assess_model_stability([{"adjusted_price": 1_000_000}], 1_000_000)
+        assert not stability["stable"]

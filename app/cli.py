@@ -8,8 +8,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import io as io_module
-from app.pipeline import ValuationPipeline
+from app import io as io_module  # noqa: E402
+from app.pipeline import ValuationPipeline  # noqa: E402
+
 
 def main():
     print("=" * 80)
@@ -17,7 +18,7 @@ def main():
     print("Valuation Intelligence Kernel (VIK) - Production Tool")
     print("=" * 80)
     print()
-    
+
     print("[1/4] Loading input data...")
     try:
         subject = io_module.load_subject()
@@ -28,7 +29,7 @@ def main():
     except Exception as e:
         print(f"  ✗ Error: {e}")
         sys.exit(1)
-    
+
     print("[2/4] Running valuation pipeline...")
     try:
         pipeline = ValuationPipeline()
@@ -38,9 +39,10 @@ def main():
     except Exception as e:
         print(f"  ✗ Error: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
-    
+
     print("[3/4] Saving JSON results...")
     try:
         io_module.save_json_results(results)
@@ -49,7 +51,7 @@ def main():
     except Exception as e:
         print(f"  ✗ Error: {e}")
         sys.exit(1)
-    
+
     print("[4/4] Saving Excel results...")
     try:
         io_module.save_excel_results(results)
@@ -58,7 +60,7 @@ def main():
     except Exception as e:
         print(f"  ✗ Error: {e}")
         sys.exit(1)
-    
+
     print("=" * 80)
     print("VALUATION SUMMARY")
     print("=" * 80)
@@ -68,5 +70,6 @@ def main():
     print("=" * 80)
     print("✓ Complete!")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
