@@ -1,297 +1,102 @@
 # Valuation Core Engine
 
-> **Enterprise-grade valuation engine implementing IVS/IFRS 13 standards for institutional-quality property assessment**
+Valuation Core Engine is a Python valuation kernel for real estate workflows. The current implementation centers on the Valuation Intelligence Kernel (VIK): market normalization, comparable adjustments, approach weighting, IFRS 13 hierarchy classification, uncertainty modeling, and a Valuation Confidence Index.
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue)](https://www.python.org/)
-[![IVS](https://img.shields.io/badge/Standard-IVS-green)](https://www.ivsc.org/)
-[![IFRS 13](https://img.shields.io/badge/Standard-IFRS%2013-green)](https://www.ifrs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+The repository also includes a small CLI pipeline that reads sample subject and comparable data, runs the VIK workflow, and writes JSON or Excel valuation outputs.
 
----
+## Repository Status
 
-## 🎯 Overview
+This project is an active MVP. The tested production path is the `app/` pipeline and the VIK modules under `src/core/intelligence_kernel/`.
 
-The **Valuation Core Engine** is the central component of the Hemmah Valuation Operating System (HVOS). It provides a production-ready, auditable framework for real estate valuation that integrates international standards (IVS, IFRS 13) with automated workflows for market analysis, comparable selection, and financial modeling.
+Some forward-looking files describe a broader package architecture that is not fully implemented yet. See [docs/maintenance-audit.md](docs/maintenance-audit.md) before extending the package surface.
 
-This engine is designed for institutional use, ensuring compliance, transparency, and reproducibility in every valuation.
+## Current Structure
 
----
-
-## 🏗️ Architecture
-
-```
+```text
 valuation-core-engine/
-├── src/
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── valuation_engine.py      # Main valuation orchestrator
-│   │   ├── ifrs13_hierarchy.py      # IFRS 13 fair value hierarchy logic
-│   │   └── ivs_compliance.py        # IVS compliance checks
-│   ├── market/
-│   │   ├── __init__.py
-│   │   ├── data_cleaner.py          # Market data cleaning & normalization
-│   │   ├── outlier_detection.py     # Statistical outlier identification
-│   │   └── data_validator.py        # Data quality validation
-│   ├── comparable/
-│   │   ├── __init__.py
-│   │   ├── selection_engine.py      # Comparable property selection logic
-│   │   ├── adjustment_calculator.py # Adjustment calculations
-│   │   └── similarity_scorer.py     # Property similarity scoring
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── income_approach.py       # Income capitalization method
-│   │   ├── market_approach.py       # Sales comparison approach
-│   │   └── cost_approach.py         # Cost approach method
-│   ├── analysis/
-│   │   ├── __init__.py
-│   │   ├── sensitivity.py           # Sensitivity analysis
-│   │   ├── scenario.py              # Scenario modeling
-│   │   └── risk_assessment.py       # Risk evaluation
-│   └── utils/
-│       ├── __init__.py
-│       ├── error_handling.py        # Comprehensive error handling
-│       ├── logging_config.py        # Structured logging
-│       └── validators.py            # Input validation utilities
-├── tests/
-│   ├── test_core/
-│   ├── test_market/
-│   ├── test_comparable/
-│   └── test_models/
-├── config/
-│   ├── standards.yaml               # IVS/IFRS configuration
-│   ├── thresholds.yaml              # Validation thresholds
-│   └── market_params.yaml           # Market-specific parameters
-├── docs/
-│   ├── architecture.md
-│   ├── api_reference.md
-│   ├── compliance_guide.md
-│   └── examples/
-├── requirements.txt
-├── setup.py
-├── .gitignore
-└── README.md
+|-- app/
+|   |-- cli.py          # command-line entry point
+|   |-- io.py           # JSON, Excel, and output helpers
+|   `-- pipeline.py     # orchestration across VIK modules
+|-- data/
+|   |-- subject.json
+|   `-- comparables.xlsx
+|-- outputs/
+|   `-- valuation_results.json
+|-- src/
+|   `-- core/
+|       |-- valuation_engine.py
+|       `-- intelligence_kernel/
+|-- tests/
+|-- requirements.txt
+|-- setup.py
+`-- pytest.ini
 ```
 
----
+## What The Pipeline Does
 
-## 🚀 Core Features
+1. Loads subject property data and comparable sales.
+2. Normalizes market observations by price per square foot.
+3. Applies comparable adjustments for size, rooms, age, location, and time.
+4. Reconciles market, income, and cost approach values through the weighting engine.
+5. Classifies the result under the IFRS 13 fair value hierarchy.
+6. Calculates uncertainty metrics and a Valuation Confidence Index.
+7. Writes valuation results to JSON and Excel.
 
-### 1. Market Data Processing
-- **Data Cleaning**: Automated normalization and standardization of market data
-- **Outlier Detection**: Statistical methods for identifying anomalies
-- **Quality Validation**: Multi-layer validation ensuring data integrity
+## Requirements
 
-### 2. Comparable Selection Engine
-- **Intelligent Matching**: Algorithm-driven selection of comparable properties
-- **Adjustment Calculations**: Automated adjustments for differences in property characteristics
-- **Similarity Scoring**: Multi-dimensional similarity analysis
+- Python 3.11 or 3.12
+- Dependencies from `requirements.txt`
 
-### 3. Valuation Methods
+The CI workflow validates Python 3.11 and 3.12.
 
-#### Income Approach
-- Direct capitalization
-- Discounted Cash Flow (DCF)
-- Gross Rent Multiplier (GRM)
-
-#### Market Approach
-- Sales comparison method
-- Adjusted comparable analysis
-- Statistical regression models
-
-#### Cost Approach
-- Replacement cost calculation
-- Depreciation estimation (physical, functional, external)
-- Land value extraction
-
-### 4. Compliance & Standards
-
-#### IFRS 13 Fair Value Hierarchy
-- **Level 1**: Quoted prices in active markets
-- **Level 2**: Observable inputs (comparable sales)
-- **Level 3**: Unobservable inputs (DCF models)
-
-#### IVS Compliance
-- IVS 105: Valuation Approaches and Methods
-- IVS 300: Valuations for Financial Reporting
-- IVS 400: Real Property Interests
-
-### 5. Analysis & Risk Assessment
-- **Sensitivity Analysis**: Impact of key variable changes
-- **Scenario Modeling**: Best/worst/expected case analysis
-- **Risk Scoring**: Quantitative risk assessment
-
----
-
-## 📊 Operational Flow
-
-```
-Market Data Input
-       ↓
-Data Cleaning & Normalization
-       ↓
-Quality Validation
-       ↓
-Comparable Selection Engine
-       ↓
-Adjustment Calculations
-       ↓
-Valuation Methods (Income/Market/Cost)
-       ↓
-IFRS 13 Hierarchy Classification
-       ↓
-IVS Compliance Checks
-       ↓
-Sensitivity & Risk Analysis
-       ↓
-Valuation Output
-```
-
----
-
-## 🛠️ Installation
+## Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/Moshbbab/valuation-core-engine.git
-cd valuation-core-engine
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Install in development mode
-pip install -e .
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install -e .
 ```
 
----
+On macOS or Linux, activate with:
 
-## 💻 Usage
-
-### Basic Valuation
-
-```python
-from valuation_core import ValuationEngine
-from valuation_core.models import MarketApproach, IncomeApproach
-
-# Initialize engine
-engine = ValuationEngine(
-    standards=['IVS', 'IFRS13'],
-    compliance_level='institutional'
-)
-
-# Load market data
-market_data = engine.load_market_data('data/market_sales.csv')
-
-# Clean and validate
-cleaned_data = engine.clean_market_data(market_data)
-
-# Select comparables
-comparables = engine.select_comparables(
-    subject_property={
-        'type': 'residential',
-        'area': 250,
-        'bedrooms': 4,
-        'location': 'downtown'
-    },
-    market_data=cleaned_data,
-    max_comparables=5
-)
-
-# Perform valuation
-valuation_result = engine.value(
-    subject=subject_property,
-    comparables=comparables,
-    approaches=['market', 'income']
-)
-
-# Get results
-print(f"Estimated Value: ${valuation_result.value:,.2f}")
-print(f"IFRS 13 Level: {valuation_result.ifrs_level}")
-print(f"Confidence Interval: {valuation_result.confidence_interval}")
+```bash
+source .venv/bin/activate
 ```
 
-### Sensitivity Analysis
+## Run The CLI
 
-```python
-from valuation_core.analysis import SensitivityAnalyzer
-
-analyzer = SensitivityAnalyzer(valuation_result)
-
-# Analyze impact of cap rate changes
-sensitivity = analyzer.analyze_variable(
-    variable='cap_rate',
-    range=(-0.02, 0.02),
-    steps=10
-)
-
-# Generate report
-analyzer.generate_report('sensitivity_report.pdf')
+```bash
+python app/cli.py
 ```
 
----
+By default, the CLI reads:
 
-## 📈 Performance
+- `data/subject.json`
+- `data/comparables.xlsx`
 
-- **Processing Speed**: <2 seconds for standard residential valuation
-- **Accuracy**: 95%+ correlation with professional appraisals
-- **Compliance**: 100% IVS/IFRS 13 adherence
-- **Scalability**: Handles 10,000+ properties/day
+And writes:
 
----
+- `outputs/valuation_results.json`
+- `outputs/valuation_results.xlsx`
 
-## 🔒 Quality Assurance
+## Run Tests
 
-- **Unit Tests**: 95%+ code coverage
-- **Integration Tests**: End-to-end workflow validation
-- **Compliance Tests**: Automated IVS/IFRS 13 verification
-- **Performance Tests**: Load and stress testing
+```bash
+python -m pytest
+```
 
----
+The test suite currently focuses on the VIK modules and the end-to-end `ValuationPipeline`.
 
-## 📚 Documentation
+## Developer Notes
 
-Comprehensive documentation is available in the `docs/` directory:
+- Keep sample inputs small and anonymized.
+- Treat files under `outputs/` as generated artifacts.
+- Add or update tests when changing valuation logic.
+- Avoid expanding `src/core/valuation_engine.py` until its missing dependency modules are either implemented or the public package design is simplified.
 
-- [Architecture Overview](docs/architecture.md)
-- [API Reference](docs/api_reference.md)
-- [Compliance Guide](docs/compliance_guide.md)
-- [Usage Examples](docs/examples/)
+## Maintenance
 
----
-
-## 🤝 Contributing
-
-This is a professional-grade system. Contributions must meet institutional standards:
-
-1. Follow PEP 8 style guidelines
-2. Include comprehensive unit tests
-3. Document all public APIs
-4. Ensure IVS/IFRS compliance
-
----
-
-## 📄 License
-
-MIT License - See [LICENSE](LICENSE) for details
-
----
-
-## 🔗 Related Systems
-
-Part of the **Hemmah Valuation Operating System (HVOS)**:
-
-- [Market Data Engine](https://github.com/Moshbbab/market-data-engine)
-- [Comparable Intelligence](https://github.com/Moshbbab/comparable-intelligence)
-- [Financial Modeling System](https://github.com/Moshbbab/financial-modeling-system)
-- [AI Validation Agents](https://github.com/Moshbbab/ai-validation-agents)
-- [Report Automation Engine](https://github.com/Moshbbab/report-automation-engine)
-
----
-
-**Status**: Production-Ready  
-**Version**: 1.0.0  
-**Last Updated**: January 2026
-
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/maintenance-audit.md](docs/maintenance-audit.md) for the current maintenance inventory, known technical debt, and safe next steps.
