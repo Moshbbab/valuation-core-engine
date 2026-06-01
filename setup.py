@@ -33,8 +33,8 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
     ],
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    package_dir={"core": "src/core", "app": "app"},
+    packages=find_packages(where="src") + find_packages(where=".", include=["app", "app.*"]),
     python_requires=">=3.11",
     install_requires=requirements,
     extras_require={
@@ -56,7 +56,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "valuation-engine=valuation_core.cli:main",
+            "valuation-engine=app.cli:main",
         ],
     },
 )
